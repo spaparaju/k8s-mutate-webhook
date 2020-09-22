@@ -1,7 +1,7 @@
 NAME = mutateme
-IMAGE_PREFIX = alexleonhardt
-IMAGE_NAME = $$(basename `pwd`)
-IMAGE_VERSION = $$(git log --abbrev-commit --format=%h -s | head -n 1)
+IMAGE_PREFIX = docker.io/meerakrishna
+IMAGE_NAME = crc-mutating-webhook
+IMAGE_VERSION = 7.0
 
 export GO111MODULE=on
 

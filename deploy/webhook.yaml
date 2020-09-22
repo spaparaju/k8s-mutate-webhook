@@ -2,72 +2,68 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mutateme
+  name: crc-mutating
   labels:
-    app: mutateme
+    app: crc-mutating
 spec:
   publishNotReadyAddresses: true
   ports:
     - port: 443
       targetPort: 8443
   selector:
-    app: mutateme
+    app: crc-mutating
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mutateme
+  name: crc-mutating
   labels:
-    app: mutateme
+    app: crc-mutating
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: mutateme
+      app: crc-mutating
   template:
     metadata:
-      name: mutateme
+      name: crc-mutating
       labels:
-        app: mutateme
+        app: crc-mutating
     spec:
       containers:
-        - name: mutator
-          image: alexleonhardt/k8s-mutate-webhook:latest
-          imagePullPolicy: Always
+        - name: crc-mutator
+          image: docker.io/meerakrishna/crc-mutating-webhook:7.0
           resources:
-            limits:
-              cpu: 500m
-              memory: 128Mi
             requests:
-              cpu: 250m
-              memory: 64Mi
+              cpu: 10m
+              memory: 10Mi
 
 ---
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: mutateme
+  name: crc-mutating
   labels:
-    app: mutateme
+    app: crc-mutating
 webhooks:
-  - name: mutateme.default.svc.cluster.local
+  - name: crc-mutating.default.svc.cluster.local
     clientConfig:
-      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUN5RENDQWJDZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRFNU1EY3lOVEV4TkRjek9Gb1hEVEk1TURjeU1qRXhORGN6T0Zvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBTHhzCk9Xay9OUE5jL2FMeFFiemZ3dnJlVGR3V3pXaU4rUlV2WTFLclRPWHB5WlBSaGMrUU8xc25ZQzdCWGtZTWNJVzAKaFVjLzRlR0Vtb3NGZjZpeTR5bzlUc3g4WW82dkxzazBHWktZay92dlJDcjVyL09wZUk2dFFOTTlMVFNkOXhXdgpFT0ZONDdsU2dFSWV5K0o4b2lHYldNb0V4Q3lmSHdINVVHV1pUZCtkWk5ELzNMT29oL3VRY2RjME4yK1llTXVECkJJa3JXL0VYODM3T3dZcGRMZlJka0dPdHoxWXloaHRGQmVyQWpRTG4vNEp2Z1lOQzQ5V0JRQitrZU1mNHJObDAKenFLaTNraklicEY1TEdUUVNYRTY3SVArb0dkYTgvYTVpN3NNUlNONFNqRVlMaGs5c1YxdUFGQW4weW9xMFNhKwpFdjB1U01jVFJjenFwVTBpSms4Q0F3RUFBYU1qTUNFd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0RRWUpLb1pJaHZjTkFRRUxCUUFEZ2dFQkFLams2NUtaUmhmbXVHUit5NnhoTFdZT1E0OUUKVmdONGR2MHJpR2ozWUw1TktoMTgyRTY0MGJpbzBFMDBabnpWb2tHT3ZnKzBSMWFGSFAyZXh4R1VsMDBWMXJkWgp6QWJCQW13aGh2UURORnJmQ0hKKytjZTNSZTl1RTdxZFFiOVgxOGlQTko3NlpKRS9OOFFmeitEZ1RqR244dEdwCjV4cTZVZ0RRWXBPd05LOXh6endLb29uKzFIRU9MSm5ELzBMVDlMRlNXRDBSSlk1eHJLWmFvbHJZUkRLRHlyc2kKNWdMUE5MZXVuVTBjb3pHdWVmY3grWXhtTXJqRndLamxORDFITEZvSmw0RTcwcTN0T0RxdUc3KzlsVW9OREJ0SgpPUmdvMWJ1THNQdVpiWURNVnZ5UHhlUkg2RDB0cmtKaFg3QmZ1bjUyZHpJNkVaUlJEQ081cVhlS0pDbz0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo=
+      caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURpRENDQW5DZ0F3SUJBZ0lRRjg5SENsMVRBNWFBVnBOdnAyejlHREFOQmdrcWhraUc5dzBCQVFzRkFEQW0KTVNRd0lnWURWUVFEREJ0cmRXSmxMV056Y2kxemFXZHVaWEpmUURFMU9UazJOVGcwTVRJd0hoY05NakF3T1RBNQpNVFF5TXpRNFdoY05NakF4TURBNU1UTXpNek16V2pBZk1SMHdHd1lEVlFRREV4UnRkWFJoZEdWdFpTNWtaV1poCmRXeDBMbk4yWXpDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBUGtlaVNyUmpGeUMKN3FqR0w5dkJ4YUZTSXhLVnBpZTAwVEZhSnVPMmxNTFVqN243NG5nbWJFUlhQYkdpL2xVMC9aRzc5K3hmN09iQgpZK0dsUFhML0xPTXUvMWw1T202dkRmd3pWNGZPSi9tVDN0VDBwU1djOVJsd2QrNGNyY3dvLzBNV1NET005aTBOCnZsV3dUdHVCUnNla1oydVB0Z0ZWWm5iOTUzakRjUDNqd3NHUkpudG4yYUZ4UmpROFJoLzJHWDJKNnM2OE9ZWnAKd0RHdHY1emNVY0N5d293QlgxQm41ZFBCSlkwWkFhaFgrWlpjUUsvUXg4TDQxVk5tSUdjNVRlWDFzcnhtV0pzYwpmc0VNSXlaWnZtR2N0ZXFsc215Y2NCWXFxNi9vWVB3MEpSRTBOUzgrdERoMGJmb0RMLzNUUHVHalNWU2MwRWpRClFTRjJvU2I2U2tFQ0F3RUFBYU9CdURDQnRUQU9CZ05WSFE4QkFmOEVCQU1DQmFBd0V3WURWUjBsQkF3d0NnWUkKS3dZQkJRVUhBd0V3REFZRFZSMFRBUUgvQkFJd0FEQWZCZ05WSFNNRUdEQVdnQlNlMTRJV0Q1MlAyMHR4d2NMLwpHeXJvMFIvcUxqQmZCZ05WSFJFRVdEQldnZ2h0ZFhSaGRHVnRaWUlRYlhWMFlYUmxiV1V1WkdWbVlYVnNkSUlVCmJYVjBZWFJsYldVdVpHVm1ZWFZzZEM1emRtT0NJbTExZEdGMFpXMWxMbVJsWm1GMWJIUXVjM1pqTG1Oc2RYTjAKWlhJdWJHOWpZV3d3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUt1MU1MQWROcXE0ZFAyMnd0Q1JaWTVjdDFkSQoycFVXSWMydVJvc2gyYTF3cmZaL25WTTlVb2JUVjRVbmNpcTNLdnhTM01RRzlxNHZBeHpEWSs5VzFtNWg1K1pjCnNmVEYvMzJ3c2pzbzhmLzhLSVc4RHhubzdsTGdrYi82OXpFYzY0TnlZdEZFWm5lQ0N0RHdNWDBxblcxUGEza2wKSG1qajBoMGl1Y0ZKUC80eCtaU29mR0p4Z0x0cTZSQVJvNUliNEoyaXcrNmh3R09MMGpRSHRsRVUydlkveDgxMwozRW94WGNBU3IzdHI5SW40UFlvVEx6OFgvcmVUSmQ3MzFnMDIrT3JGTnNyUjcycmY3NGJScUlLYXZLS3FmOXlqCjQ1Q2tRcFRSZlNINEhQMHdXMVBGVS82aDVGTURkZ093SDVlLys3OFM3TnV2V1lQbjEyZ3J3eEZqZW84PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
       service:
-        name: mutateme
+        name: crc-mutating
         namespace: default
         path: "/mutate"
         port: 443
     rules:
       - operations: ["CREATE"]
-        apiGroups: [""]
-        apiVersions: ["v1"]
+        apiGroups: ["*"]
+        apiVersions: ["*"]
         resources: ["pods"]
+        scope: "Namespaced"
     sideEffects: None
     timeoutSeconds: 5
     reinvocationPolicy: Never
     failurePolicy: Ignore
-    namespaceSelector:
-      matchLabels:
-        mutateme: enabled
+    matchPolicy: Equivalent
+    
