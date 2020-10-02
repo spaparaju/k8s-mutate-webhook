@@ -2,38 +2,38 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: crc-mutating
+  name: mutateme
   labels:
-    app: crc-mutating
+    app: mutateme
 spec:
   publishNotReadyAddresses: true
   ports:
     - port: 443
       targetPort: 8443
   selector:
-    app: crc-mutating
+    app: mutateme
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: crc-mutating
+  name: mutateme
   labels:
-    app: crc-mutating
+    app: mutateme
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: crc-mutating
+      app: mutateme
   template:
     metadata:
-      name: crc-mutating
+      name: mutateme
       labels:
-        app: crc-mutating
+        app: mutateme
     spec:
       containers:
-        - name: crc-mutator
-          image: docker.io/meerakrishna/crc-mutating-webhook:7.0
+        - name: mutator
+          image: docker.io/meerakrishna/crc-mutating-webhook:8.0
           resources:
             requests:
               cpu: 10m
@@ -43,15 +43,15 @@ spec:
 apiVersion: admissionregistration.k8s.io/v1beta1
 kind: MutatingWebhookConfiguration
 metadata:
-  name: crc-mutating
+  name: mutateme
   labels:
-    app: crc-mutating
+    app: mutateme
 webhooks:
-  - name: crc-mutating.default.svc.cluster.local
+  - name: mutateme.default.svc.cluster.local
     clientConfig:
       caBundle: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURpRENDQW5DZ0F3SUJBZ0lRRjg5SENsMVRBNWFBVnBOdnAyejlHREFOQmdrcWhraUc5dzBCQVFzRkFEQW0KTVNRd0lnWURWUVFEREJ0cmRXSmxMV056Y2kxemFXZHVaWEpmUURFMU9UazJOVGcwTVRJd0hoY05NakF3T1RBNQpNVFF5TXpRNFdoY05NakF4TURBNU1UTXpNek16V2pBZk1SMHdHd1lEVlFRREV4UnRkWFJoZEdWdFpTNWtaV1poCmRXeDBMbk4yWXpDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBUGtlaVNyUmpGeUMKN3FqR0w5dkJ4YUZTSXhLVnBpZTAwVEZhSnVPMmxNTFVqN243NG5nbWJFUlhQYkdpL2xVMC9aRzc5K3hmN09iQgpZK0dsUFhML0xPTXUvMWw1T202dkRmd3pWNGZPSi9tVDN0VDBwU1djOVJsd2QrNGNyY3dvLzBNV1NET005aTBOCnZsV3dUdHVCUnNla1oydVB0Z0ZWWm5iOTUzakRjUDNqd3NHUkpudG4yYUZ4UmpROFJoLzJHWDJKNnM2OE9ZWnAKd0RHdHY1emNVY0N5d293QlgxQm41ZFBCSlkwWkFhaFgrWlpjUUsvUXg4TDQxVk5tSUdjNVRlWDFzcnhtV0pzYwpmc0VNSXlaWnZtR2N0ZXFsc215Y2NCWXFxNi9vWVB3MEpSRTBOUzgrdERoMGJmb0RMLzNUUHVHalNWU2MwRWpRClFTRjJvU2I2U2tFQ0F3RUFBYU9CdURDQnRUQU9CZ05WSFE4QkFmOEVCQU1DQmFBd0V3WURWUjBsQkF3d0NnWUkKS3dZQkJRVUhBd0V3REFZRFZSMFRBUUgvQkFJd0FEQWZCZ05WSFNNRUdEQVdnQlNlMTRJV0Q1MlAyMHR4d2NMLwpHeXJvMFIvcUxqQmZCZ05WSFJFRVdEQldnZ2h0ZFhSaGRHVnRaWUlRYlhWMFlYUmxiV1V1WkdWbVlYVnNkSUlVCmJYVjBZWFJsYldVdVpHVm1ZWFZzZEM1emRtT0NJbTExZEdGMFpXMWxMbVJsWm1GMWJIUXVjM1pqTG1Oc2RYTjAKWlhJdWJHOWpZV3d3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUt1MU1MQWROcXE0ZFAyMnd0Q1JaWTVjdDFkSQoycFVXSWMydVJvc2gyYTF3cmZaL25WTTlVb2JUVjRVbmNpcTNLdnhTM01RRzlxNHZBeHpEWSs5VzFtNWg1K1pjCnNmVEYvMzJ3c2pzbzhmLzhLSVc4RHhubzdsTGdrYi82OXpFYzY0TnlZdEZFWm5lQ0N0RHdNWDBxblcxUGEza2wKSG1qajBoMGl1Y0ZKUC80eCtaU29mR0p4Z0x0cTZSQVJvNUliNEoyaXcrNmh3R09MMGpRSHRsRVUydlkveDgxMwozRW94WGNBU3IzdHI5SW40UFlvVEx6OFgvcmVUSmQ3MzFnMDIrT3JGTnNyUjcycmY3NGJScUlLYXZLS3FmOXlqCjQ1Q2tRcFRSZlNINEhQMHdXMVBGVS82aDVGTURkZ093SDVlLys3OFM3TnV2V1lQbjEyZ3J3eEZqZW84PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
       service:
-        name: crc-mutating
+        name: mutateme
         namespace: default
         path: "/mutate"
         port: 443
@@ -67,3 +67,4 @@ webhooks:
     failurePolicy: Ignore
     matchPolicy: Equivalent
     
+
