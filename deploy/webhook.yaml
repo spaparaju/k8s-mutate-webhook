@@ -66,5 +66,6 @@ webhooks:
     reinvocationPolicy: Never
     failurePolicy: Ignore
     matchPolicy: Equivalent
+    admissionReviewVersions: ["v1", "v1beta1"]
     
 
