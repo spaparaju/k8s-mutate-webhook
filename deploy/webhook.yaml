@@ -52,7 +52,7 @@ spec:
           name: webhook-certs
         env:
         - name: MUTATE_CONFIG
-          value: crc-mutate-config
+          value: crc-mutating
         - name: WEBHOOK_SERVICE
           value: crc-mutating
         - name: WEBHOOK_NAMESPACE
