@@ -59,7 +59,7 @@ spec:
           value:  default  
       containers:
         - name: crc-mutator
-          image: docker.io/meerakrishna/crc-mutating-webhook:10.0
+          image: docker.io/meerakrishna/crc-mutating-webhook:11.0
           volumeMounts:
           - mountPath: /etc/webhook/certs
             name: webhook-certs
