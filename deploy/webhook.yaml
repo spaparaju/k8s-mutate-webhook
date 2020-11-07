@@ -45,7 +45,7 @@ spec:
     spec:
       initContainers:
       - name: webhook-init
-        image: docker.io/meerakrishna/init-crc-mutating-webhook:15.0
+        image: docker.io/meerakrishna/init-crc-mutating-webhook:16.0
         imagePullPolicy: Always
         volumeMounts:
         - mountPath: /etc/webhook/certs
